@@ -1,0 +1,762 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>TinyExcel: Tiny incremental spreadsheet system | Write your own tiny programming system(s)! (NPRG077)</title>
+		<link rel="stylesheet" href="reveal/reveal.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+		<style type="text/css">
+
+ 			@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400&family=Roboto:ital,wght@0,100;0,300;0,700;1,100&family=Titillium+Web:wght@200;400;600&display=swap');
+			.reveal .slides {
+				text-align:left;
+				xbackground:yellow;
+				color:#003657;
+			}
+			section {
+				height:620px; /* 700-60 */
+				width:900px !important; /* 960-60 */
+				padding:40px 30px 40px 30px;
+			}
+			.overview section {
+				width:960px !important;
+			}
+			h1 {
+				font:600 44pt 'Titillium Web', sans-serif;
+				padding:0px;
+				margin:0px;
+				color:#d22d40;
+				line-height:1.2em;
+			}
+			h2 {
+				font:200 40pt 'Titillium Web', sans-serif;
+				line-height:1.2em;
+				padding:0px;
+				margin:0px 0px 50px 0px;
+			}
+			p, li {
+				font:100 30pt 'Roboto', sans-serif;
+				margin:0px;
+				padding:0px;
+			}
+			h3 {
+				font:700 30pt 'Roboto', sans-serif;
+				margin:0px;
+				padding:0px;
+			}
+			h3 em {
+				font-style:normal;
+				font-weight:300;
+			}
+			strong {
+				font-weight:300;
+			}
+			a {
+				text-decoration:none;
+				color:#0065A0;
+			}
+			a:hover, a:active {
+				color:#0081CC;
+			}
+
+			blockquote p {
+				font-style:italic;
+			}
+
+			p code, li code {
+				font:400 22pt 'Roboto Mono', monospace;
+			}
+			pre code {
+				font:400 17pt 'Roboto Mono', monospace;
+			}
+			.smallcode pre code {
+				font-size:15pt;
+			}
+
+			pre {
+				margin:25px 0px 25px 50px;
+			}
+
+			.hljs-comment { color:#008000 !important; }
+
+			i { width:56px; text-align:left; }
+
+			.math { font-size:20pt; }
+
+			.lists p, .lists li { font-size:26pt; }
+			.lists ul { margin:10px 0px 40px 40px; padding:0px; }
+			.lists p { margin:10px 0px 40px 0px; }
+			.lists h1 { margin-bottom:40px; }
+			.lists h2 { margin:0px; padding:0px; font:300 30pt 'Roboto', sans-serif; }
+			.lists .decor { margin-top:20px; float:right; max-width:350px; max-height:400px; border:3px solid black; }
+			.lists .decor pre { margin:15px; padding:0px; }
+			.reveal .lists .body img { border:3px solid black; margin-top:20px; float:right; max-width:280px; max-height:350px; }
+			.reveal .lists.bigger .body img { max-width:340px; max-height:350px; }
+			.reveal .lists.smaller .body img { max-width:200px; max-height:200px; }
+			.reveal .lists.noborder .body img { border-style:none; }
+			.lists.condensed p, .lists.condensed li { font-size:24pt }
+			.lists.condensed p { margin:5px 0px 20px 0px; }
+			.lists.condensed h2 { font-size:28pt; }
+			.lists.condensed h1 { margin-bottom: 20px; }
+
+
+			.content h1 { margin-bottom:40px; }
+			.content h2 { margin-top:-40px; }
+			.content h3 { font-size:26pt; margin-bottom:20px; margin-top:40px; }
+			.content p { margin-bottom:20px; }
+			.content p, .content li { font-size:26pt; }
+			.content.condensed h1 { margin-bottom:10px; }
+			.content.condensed p, .content.condensed li { font-size:22pt; }
+			.content.two-column .body div { width:450px; float:left; }
+			.content.three-column .body div { width:280px; margin-left:10px; margin-right:10px; float:left; }
+			.content.two-column pre, .content.two-column blockquote { margin-left:0px; }
+			.content.three-column img { max-width:200px; text-align:center; }
+			.content.three-column.smaller img { max-width:140px; text-align:center; margin-left:40px; }
+			.content img { max-width:100%; max-height:450px; border:3px solid black; }
+			.content.noborder img { border-style:none; }
+			.content.three-column h3, .content.two-column h3 { margin-bottom:30px; margin-top:0px; }
+
+			.largeicons p, .largeicons li { font-size:26pt; }
+			.largeicons h2, .icons h2 { margin-bottom:0px; }
+			.largeicons li, .icons li { list-style-type:none; padding:0px; margin:15px 0px 15px 0px; }
+			.largeicons ul, .icons ul { margin:50px 0px 0px 0px;padding:0px; }
+			.largeicons i.placeholder, .icons i.placeholder { width:65px; display:inline-block; }
+
+			.title h1 { margin-bottom:40px; }
+			.title h2 { margin-top:-40px; font-weight:200; }
+			.title.swapped h1 { font-size:34pt; font-weight:200; margin-top:20px; }
+			.title.swapped h2 { margin-top:-30px; color:#d22d40; font-weight:400; }
+			.title h2 strong { font-weight:400; }
+			.title .body { position:absolute; bottom:40px; width:900px; }
+			.title .body p { margin:0px 0px 20px 0px; padding:0px; font-size:24pt; }
+			.title i { font-size:80%; width:32px; margin:0px 0px 0px 4px; }
+
+			.image .body1 { width:520px;margin-right:30px;height:620px;float:left;text-align:center; }
+			.image .body1 p { margin:50px 0px 0px 0px; }
+			.image .body1 img { max-width:500px;max-height:500px; border:3px solid black; }
+			.image h1 { font-size:32pt; margin-bottom:30px; }
+			.image h2 { font-size:32pt; margin-top:-30px; color:#d22d40; font-weight:400; }
+			.image p { margin-top:20px; font-size:26pt; }
+			.image .citation p { margin-top:-25px; margin-bottom:30px; }
+			.image.smaller .body1 { width:460px; }
+			.image.smaller .body1 img { max-width:440px; }
+			.image.smaller2x .body1 { width:420px; }
+			.image.smaller2x .body1 img { max-width:380px; }
+			.image.noborder img { border-style:none; }
+			.image li { margin:0px; font-size:26pt; }
+			.image ul { position:relative; left:35px; }
+
+			.code .body1 { width:520px;margin-right:30px;height:620px;float:left;}
+			.code h1 { font-size:32pt; margin-bottom:30px; }
+			.code h2 { font-size:32pt; margin-top:-30px; color:#d22d40; font-weight:400; }
+			.code p { margin-top:20px; font-size:26pt; }
+			.code li { margin:0px; font-size:26pt; }
+			.code ul { position:relative; left:35px; }
+			.code .citation p { margin-top:-25px; margin-bottom:30px; }
+			.code.smaller .body1 { width:460px; }
+
+			section.subtitle { height:auto; }
+			section.subtitle .body { padding:215px 0px 215px 0px; }
+
+			.mfflogo { position:absolute; right:30px; bottom:0px; width:140px; border-style:none !important; }
+			.nologo .mfflogo { display:none; }
+			@media print { .mfflogo { right:0px; bottom:0px; width:100px; } }
+
+			/* DECK-SPECIFIC */
+			#qr { position:absolute; right:-50px; bottom:-30px; width:150px; border:60px solid white; }
+		</style>
+	</head>
+	<body>
+
+		<div class="reveal">
+			<div class="slides">
+				<section><section class="title nologo swapped"><h1>TinyExcel: Tiny spreadsheet system</h1>
+<h2>Technical dimensions of spreadsheets</h2>
+<div class="body">
+<p><strong>Tomas Petricek</strong>, Charles University</p>
+<p><em><i class="fa fa-envelope"></i></em> <a href="mailto:tomas@tomasp.net">tomas@tomasp.net</a><br />
+<em><i class="fa-brands fa-bluesky"></i></em> <a href="https://bsky.app/profile/tomasp.net">@tomasp.net</a><br />
+<em><i class="fa-solid fa-globe"></i></em> <a href="https://tomasp.net"><a href="https://tomasp.net">https://tomasp.net</a></a><br />
+<em><i class="fa-solid fa-globe"></i></em> <a href="https://d3s.mff.cuni.cz/teaching/nprg077">https://d3s.mff.cuni.cz/teaching/nprg077</a></p>
+<img src="img/qr.png" id="qr" />
+</div>
+<img src="img/cuni.png" class="mfflogo" /></section><section class="content two-column xtn"><h1>Is Excel real programming?</h1>
+<div class="body">
+</div>
+<img src="img/cuni.png" class="mfflogo" /></section><section class="content two-column xtn"><h1>Is Excel real programming?</h1>
+<div class="body">
+<div>
+<h3>It is Turing-complete!</h3>
+<p>Encoded using "drag-down"</p>
+<p><img src="img/tinyexcel/turing.png" alt="" /></p>
+</div>
+<div class="fragment">
+<h3>It is widely-used!</h3>
+<p>Simple, but can do a lot...</p>
+<p><img src="img/tinyexcel/nightmare.png" alt="" /></p>
+<style>.xtn img { max-width:60%; margin:20px 0px 0px 20px; }
+.xtn h3 { margin-bottom:10px !important; }</style>
+</div>
+</div>
+<img src="img/cuni.png" class="mfflogo" /></section><section class="icons "><h1>TinyExcel</h1>
+<h2>What makes spreadsheets interesting?</h2>
+<ul>
+<li><i class='fa fa-users'></i> Most accessible programming tools!</li>
+<li><i class='fa fa-city'></i> Program in a two-dimensional space</li>
+<li><i class='fa fa-pen-to-square'></i> Edit and view in the same environment</li>
+<li><i class='fa fa-arrows-rotate'></i> Automatic and live sheet recomputation</li>
+</ul>
+<img src="img/cuni.png" class="mfflogo" /></section><section class="content tdims"><h1>Technical Dimensions of Programming Systems</h1>
+<div class="body">
+<div>
+<p><strong>What matters about stateful interactive systems?</strong><br />
+Jakubovic et al. (2023). See: <a href="https://tomasp.net/techdims">https://tomasp.net/techdims</a></p>
+<p><img src="img/tinyexcel/techdims.png" alt="" /></p>
+<style>.tdims h1 { font-size:32pt; margin-bottom:10px; } .tdims p { font-size:24pt; }</style>
+</div>
+</div>
+<img src="img/cuni.png" class="mfflogo" /></section><section class="subtitle "><div class="body">
+<h1>Demo</h1>
+<h2>Excel data exploration basics</h2>
+</div>
+<img src="img/cuni.png" class="mfflogo" /></section><section class="lists "><div class="body">
+<h1>The good and the bad</h1>
+<img src="img/tinyexcel/rr.png"/>
+<div>
+<h2>High usability</h2>
+<ul>
+<li>Live exploratory programming</li>
+<li>Work with concrete values</li>
+<li>Learning from examples</li>
+</ul>
+</div>
+<div class="fragment">
+<h2>High-profile errors</h2>
+<ul>
+<li>"Growth in the time of debt" errors</li>
+<li>
+SEPT2, MARCH1 gene names<br />
+(Septin, Membrane-Associated Ring Finger)
+</li>
+</ul>
+</div>
+</div>
+<img src="img/cuni.png" class="mfflogo" /></section><section class="largeicons "><h1>Confusing terminology</h1>
+<ul>
+<li>
+<i class='fa fa-magnifying-glass'></i> <strong>Exploratory programming</strong><br />
+<i class="placeholder"></i>Write, run, rethink with easy editing
+</li>
+<li>
+<i class='fa fa-image'></i> <strong>Live programming</strong><br />
+<i class="placeholder"></i>See results of your program immediately
+</li>
+<li>
+<i class='fa fa-music'></i> <strong>Live coding</strong><br />
+<i class="placeholder"></i>Run immediately, typically audio performance
+</li>
+<li>
+<i class='fa fa-laptop-code'></i> <strong>Interactive programming</strong><br />
+<i class="placeholder"></i>Modify stateful programming system
+</li>
+</ul>
+<img src="img/cuni.png" class="mfflogo" /></section><section class="image "><div class="body1">
+<p><img src="img/tinyexcel/excel.png" alt="" /></p>
+</div><div class="body2">
+<div class="body">
+<div>
+<h1>Spreadsheets are...</h1>
+<p><strong>Exploratory</strong> - easy to fiddle with data</p>
+<p><strong>Live</strong> - you see results (almost) immediately</p>
+</div>
+</div>
+</div>
+<img src="img/cuni.png" class="mfflogo" /></section><section class="image smaller noborder"><div class="body1">
+<p><img src="img/tinyexcel/abstraction.png" alt="" /></p>
+</div><div class="body2">
+<div class="body">
+<div>
+<h1>Abstraction is hard</h1>
+<p><strong>Drag-down for formulas makes abstraction easy</strong></p>
+<p>You only ever work with concrete values</p>
+<p>Always see sample inputs &amp; verify sample outputs</p>
+</div>
+</div>
+</div>
+<img src="img/cuni.png" class="mfflogo" /></section><section class="image "><div class="body1">
+<p><img src="img/tinyexcel/unimate.jpg" alt="" /></p>
+</div><div class="body2">
+<div class="body">
+<div>
+<h1>Concreteness</h1>
+<p><strong>Unimate industrial robot (1961)</strong></p>
+<p>Program by moving<br />
+the robotic hand</p>
+<p>Macro recording<br />
+but done right</p>
+</div>
+</div>
+</div>
+<img src="img/cuni.png" class="mfflogo" /></section><section class="lists "><div class="body">
+<h1>Concrete programming</h1>
+<img src="img/tinyexcel/pygmalion.jpg"/>
+<div>
+<h2>Programming by demonstration</h2>
+<ul>
+<li>Think macro recording</li>
+<li>How to generalize &amp; re-apply</li>
+<li>"Drag down" in spreadsheets</li>
+</ul>
+</div>
+<div class="fragment">
+<h2>Programming by example</h2>
+<ul>
+<li>Generalize from input/output list</li>
+<li>Search for fitting program</li>
+<li>Also FlashFill in Excel</li>
+</ul>
+</div>
+</div>
+<img src="img/cuni.png" class="mfflogo" /></section><section class="subtitle "><div class="body">
+<h1>Demo</h1>
+<h2>FlashFill in Excel</h2>
+</div>
+<img src="img/cuni.png" class="mfflogo" /></section><section class="lists "><div class="body">
+<h1>How people learn Excel</h1>
+<img src="img/tinyexcel/excel.png"/>
+<div>
+<h2>From existing spreadsheets</h2>
+<ul>
+<li>View source of formulas</li>
+<li>Learn how functions work</li>
+<li>Logic needs to be visible!</li>
+</ul>
+</div>
+<div class="fragment">
+<h2>Going to the expert</h2>
+<ul>
+<li>Every office has Excel "guru"</li>
+<li>Needed for harder aspects</li>
+<li>Needed for use that does not have a "trace"</li>
+</ul>
+</div>
+</div>
+<img src="img/cuni.png" class="mfflogo" /></section><section class="image "><div class="body1">
+<p><img src="img/tinyexcel/grid.png" alt="" /></p>
+</div><div class="body2">
+<div class="body">
+<div>
+<h1>The grid power!</h1>
+<p><strong>Humans are good at working with space</strong></p>
+<p>Programs are not typically spatial...</p>
+<p>Grid is limiting, but powerful concept</p>
+</div>
+</div>
+</div>
+<img src="img/cuni.png" class="mfflogo" /></section><section class="icons "><h1>TinyExcel</h1>
+<h2>Learning from spreadsheets?</h2>
+<ul>
+<li><i class='fa fa-user-tie'></i> More programming for non-programmers?</li>
+<li><i class='fa fa-arrows-rotate'></i> Immediate live feedback is great!</li>
+<li><i class='fa fa-shapes'></i> Abstractions from working with concrete values</li>
+<li><i class='fa fa-map-location'></i> Programs should exist in understandable space</li>
+</ul>
+<img src="img/cuni.png" class="mfflogo" /></section><section class="image "><div class="body1">
+<p><img src="img/tinyexcel/victor.png" alt="" /></p>
+</div><div class="body2">
+<div class="body">
+<div>
+<h1>Could "normal" programming be more like this?</h1>
+<p><strong>Demos by Bret Victor</strong></p>
+<p>Learnable Program&shy;ming: Designing a programming system for understanding programs
+(<a href="http://worrydream.com/LearnableProgramming/">online</a>)</p>
+</div>
+</div>
+</div>
+<img src="img/cuni.png" class="mfflogo" /></section><section class="icons "><h1>TinyExcel</h1>
+<h2>Scope of the tiny version</h2>
+<ul>
+<li><i class='fa fa-table-cells'></i> Two-dimensional space with references</li>
+<li><i class='fa fa-down-long'></i> "Drag-down" to apply formula to a column</li>
+<li><i class='fa fa-file-invoice-dollar'></i> Relative and absolute cell references</li>
+<li><i class='fa fa-diagram-project'></i> Incremental computational engine</li>
+</ul>
+<img src="img/cuni.png" class="mfflogo" /></section></section><section><section class="title nologo swapped"><h1>TinyExcel: Tiny spreadsheet system</h1>
+<h2>Architecture and F# events</h2>
+<div class="body">
+<p><strong>Tomas Petricek</strong>, Charles University</p>
+<p><em><i class="fa fa-envelope"></i></em> <a href="mailto:tomas@tomasp.net">tomas@tomasp.net</a><br />
+<em><i class="fa-brands fa-bluesky"></i></em> <a href="https://bsky.app/profile/tomasp.net">@tomasp.net</a><br />
+<em><i class="fa-solid fa-globe"></i></em> <a href="https://tomasp.net"><a href="https://tomasp.net">https://tomasp.net</a></a><br />
+<em><i class="fa-solid fa-globe"></i></em> <a href="https://d3s.mff.cuni.cz/teaching/nprg077">https://d3s.mff.cuni.cz/teaching/nprg077</a></p>
+<img src="img/qr.png" id="qr" />
+</div>
+<img src="img/cuni.png" class="mfflogo" /></section><section class="image "><div class="body1">
+<p><img src="img/tinyexcel/deps.png" alt="" /></p>
+</div><div class="body2">
+<div class="body">
+<div>
+<h1>Inter-cell dependencies</h1>
+<p>In what order to evaluate sheet?</p>
+<p>Avoid evaluating<br />
+a cell repeatedly!</p>
+<p>What to re-evaluate<br />
+when cells change?</p>
+</div>
+</div>
+</div>
+<img src="img/cuni.png" class="mfflogo" /></section><section class="image smaller"><div class="body1">
+<p><img src="img/tinyexcel/graph.png" alt="" /></p>
+</div><div class="body2">
+<div class="body">
+<div>
+<h1>Dependency graphs</h1>
+<p>Dependencies via cell<br />
+and range references</p>
+</div>
+<div class="fragment">
+<p><strong>Cyclic dependencies</strong></p>
+<p>Excel does a fixed maximal number of iterations</p>
+</div>
+<div class="fragment">
+<p><strong>Explicit or implicit in code</strong></p>
+<p>Graph data structure vs. event listeners</p>
+</div>
+</div>
+</div>
+<img src="img/cuni.png" class="mfflogo" /></section><section class="lists noborder"><div class="body">
+<h1>Reactive programming</h1>
+<img src="img/tinyexcel/rx.png"/>
+<div>
+<h2>Different implementations</h2>
+<ul>
+<li>Functional Reactive Programming</li>
+<li>ReactiveX (rxjs, RxJava, Rx.Net)</li>
+<li>Elm software architecture</li>
+</ul>
+</div>
+<div class="fragment">
+<h2>Implementation techniques</h2>
+<ul>
+<li><strong>Push-based</strong> - Changes propagated from source</li>
+<li><strong>Pull-based</strong> - Update required by the consumer</li>
+<li><strong>Builder-based</strong> - Computation to be instantiated</li>
+</ul>
+</div>
+</div>
+<img src="img/cuni.png" class="mfflogo" /></section><section class="icons "><h1>TinyExcel</h1>
+<h2>Implementation techniques</h2>
+<ul>
+<li><i class='fa fa-ghost'></i> Naive non-cached recursive starting point</li>
+<li><i class='fa fa-bolt'></i> Cell is as graph node with "Updated" event</li>
+<li><i class='fa fa-headphones-simple'></i> Depending nodes listen, recompute &amp; notify</li>
+<li><i class='fa fa-heart-crack'></i> Tricky error and update handling...</li>
+</ul>
+<img src="img/cuni.png" class="mfflogo" /></section><section class="subtitle "><div class="body">
+<h1>The F# language</h1>
+<h2>What we need for Excel</h2>
+</div>
+<img src="img/cuni.png" class="mfflogo" /></section><section class="lists condensed"><div class="body">
+<h1>What we need to write Excel</h1>
+<img src="img/tinyexcel/fsharp.png"/>
+<div>
+<h2>Event handling</h2>
+<ul>
+<li>F# events are objects (values)</li>
+<li>Can trigger &amp; register handlers</li>
+</ul>
+</div>
+<div class="fragment">
+<h2>More tips &amp; tricks</h2>
+<ul>
+<li>Collection processing</li>
+<li>Fancy patterns and active patterns</li>
+</ul>
+</div>
+<div class="fragment">
+<h2>Finally a user interface?</h2>
+<ul>
+<li>Would be nice, but setup costs high...</li>
+<li>Write sheet as HTML document &amp; open</li>
+</ul>
+</div>
+</div>
+<img src="img/cuni.png" class="mfflogo" /></section><section class="content "><h1>Generating lists</h1>
+<div class="body">
+<div>
+<p><strong>List comprehensions with the yield keyword</strong></p>
+<pre><code class="language-fsharp">let worldInfo =
+  [ yield addr "A1", Const(String "Continent")
+    yield addr "B1", Const(String "Population (thousands)")
+    for i, (cont, pop) in Seq.indexed continents do
+      yield addr ("A"+string(i+2)), Const(String cont)
+      yield addr ("B"+string(i+2)), Const(Number pop) ]
+</code></pre>
+<ul>
+<li><code>yield</code> adds another item to the list</li>
+<li><code>for</code> and other constructs to write generators</li>
+<li><code>Seq.indexed</code> trick to get item index</li>
+</ul>
+</div>
+</div>
+<img src="img/cuni.png" class="mfflogo" /></section><section class="subtitle "><div class="body">
+<h1>Demo</h1>
+<h2>Extending the List module</h2>
+</div>
+<img src="img/cuni.png" class="mfflogo" /></section><section class="code "><div class="body1">
+<pre><code class="language-fsharp">// Decares event value
+let evt = Event&lt;int&gt;()
+
+// Trigger event
+evt.Trigger(1)
+evt.Trigger(2)
+evt.Trigger(3)
+
+// Object for listening
+evt.Publish
+
+// Listen and print
+evt.Publish.Add(fun n -&gt;
+  printfn "Got: %d" n)
+</code></pre>
+</div><div class="body2">
+<div class="body">
+<div>
+<h1>F# Events</h1>
+<p><strong>Regular F# objects</strong><br />
+Not special constructs</p>
+<p>Corresond to <code>IObservable</code> in C#</p>
+<p>Add and remove handlers using <code>AddHandler</code> and <code>RemoveHandler</code></p>
+</div>
+</div>
+</div>
+<img src="img/cuni.png" class="mfflogo" /></section><section class="subtitle "><div class="body">
+<h1>Demo</h1>
+<h2>Working with F# events</h2>
+</div>
+<img src="img/cuni.png" class="mfflogo" /></section><section class="content "><h1>Writing and opening HTML files</h1>
+<div class="body">
+<div>
+<p><strong>If you know C#, you can use other options too!</strong></p>
+<pre><code class="language-fsharp">let demo () =
+  let f = Path.GetTempFileName() + ".html"
+  use wr = new StreamWriter(File.OpenWrite(f))
+  wr.Write("""&lt;html&gt;&lt;body&gt;&lt;h1&gt;Hello world!&lt;/h1&gt;&lt;/body&gt;&lt;/html&gt;""")
+  wr.Close()
+  Process.Start(f)
+</code></pre>
+<ul>
+<li><code>GetTempFileName</code> gives you a file in TEMP folder</li>
+<li><code>use</code> to make sure stream gets closed on error</li>
+<li><code>Process.Start</code> can (sometimes) open files too</li>
+</ul>
+</div>
+</div>
+<img src="img/cuni.png" class="mfflogo" /></section></section><section><section class="title nologo swapped"><h1>TinyExcel: Tiny spreadsheet system</h1>
+<h2>Code structure and step-by-step guide</h2>
+<div class="body">
+<p><strong>Tomas Petricek</strong>, Charles University</p>
+<p><em><i class="fa fa-envelope"></i></em> <a href="mailto:tomas@tomasp.net">tomas@tomasp.net</a><br />
+<em><i class="fa-brands fa-bluesky"></i></em> <a href="https://bsky.app/profile/tomasp.net">@tomasp.net</a><br />
+<em><i class="fa-solid fa-globe"></i></em> <a href="https://tomasp.net"><a href="https://tomasp.net">https://tomasp.net</a></a><br />
+<em><i class="fa-solid fa-globe"></i></em> <a href="https://d3s.mff.cuni.cz/teaching/nprg077">https://d3s.mff.cuni.cz/teaching/nprg077</a></p>
+<img src="img/qr.png" id="qr" />
+</div>
+<img src="img/cuni.png" class="mfflogo" /></section><section class="code "><div class="body1">
+<pre><code class="language-fsharp">// In column, row format
+// e.g. A1 becomes (1, 1)
+type Address = int * int
+
+// Note error is a value!
+type Value =
+  | Number of int
+  | String of string
+  | Error of string
+
+// Operators are functions
+type Expr =
+  | Const of Value
+  | Reference of Address
+  | Function of string * Expr list
+
+// Using immutable F# map
+type Sheet = Map&lt;Address, Expr&gt;
+</code></pre>
+</div><div class="body2">
+<div class="body">
+<div>
+<h1>Simple start</h1>
+<p><strong>Standard ML-like expression language</strong></p>
+<p>References (instead<br />
+of variables) are evaluated recursively</p>
+<p><strong>Sheet maps (filled) addresses to expressions</strong></p>
+</div>
+</div>
+</div>
+<img src="img/cuni.png" class="mfflogo" /></section><section class="code "><div class="body1">
+<pre><code class="language-fsharp">// Expression and value are
+// mutable. Updated triggered
+// when they change.
+type CellNode =
+  { mutable Value : Value
+    mutable Expr : Expr
+    Updated : Event&lt;unit&gt; }
+
+// Immutable map
+// of mutable cells
+type LiveSheet =
+  Map&lt;Address, CellNode&gt;
+</code></pre>
+</div><div class="body2">
+<div class="body">
+<div>
+<h1>Version with the dependency graph</h1>
+<p><strong>Value evaluated</strong><br />
+on creation which prevents circular refs</p>
+<p><strong>Expression stored</strong><br />
+"drag down" expansion</p>
+<p><strong>Updated event</strong><br />
+to notify of changes</p>
+</div>
+</div>
+</div>
+<img src="img/cuni.png" class="mfflogo" /></section><section class="lists "><div class="body">
+<h1>Advanced extensions</h1>
+<img src="img/tinyexcel/tiny.png"/>
+<div>
+<h2>Ranges and array values</h2>
+<pre><code class="language-fsharp">type Value = // (...)
+  | Array of Value list
+
+type Expr = // (...)
+  | Range of Address * Address
+</code></pre>
+</div>
+<div class="fragment">
+<h2>Absolute addresses</h2>
+<pre><code class="language-fsharp">type Index = Fixed of int | Normal of int
+type RawAddress = int * int
+type Address = Index * Index
+</code></pre>
+</div>
+</div>
+<img src="img/cuni.png" class="mfflogo" /></section><section class="subtitle "><div class="body">
+<h1>Lab overview</h1>
+<h2>TinyExcel step-by-step</h2>
+</div>
+<img src="img/cuni.png" class="mfflogo" /></section><section class="content "><h1>TinyExcel - Basic tasks</h1>
+<div class="body">
+<div>
+<ol>
+<li>
+<p><strong>Simple expression evaluator</strong><br />
+With grid references by cell address</p>
+</li>
+<li>
+<p><strong>Drag down formula expanding</strong><br />
+Relocating relative references in formula</p>
+</li>
+<li>
+<p><strong>Reactive event-based structure</strong><br />
+Refactoring code to use graph nodes</p>
+</li>
+<li>
+<p><strong>Reactive event-based computation</strong><br />
+Adding update event handling</p>
+</li>
+<li>
+<p><strong>Rendering sheets as HTML pages</strong><br />
+First step towards a user interface</p>
+</li>
+</ol>
+</div>
+</div>
+<img src="img/cuni.png" class="mfflogo" /></section><section class="content "><h1>TinyExcel - Bonus and super tasks</h1>
+<div class="body">
+<div>
+<ol>
+<li>
+<p><strong>Absolute and relative addresses</strong><br />
+Alongside with improved "drag down"</p>
+</li>
+<li>
+<p><strong>Adding range selection and array values</strong><br />
+Required for the SUM function</p>
+</li>
+<li>
+<p><strong>Adding change visualization</strong><br />
+Tracking and showing what has changed</p>
+</li>
+<li>
+<p><strong>Full support for live editing</strong><br />
+Updating dependencies in the dependency graph</p>
+</li>
+</ol>
+</div>
+</div>
+<img src="img/cuni.png" class="mfflogo" /></section><section class="lists "><div class="body">
+<h1>Where can you use this...</h1>
+<img src="img/tinyexcel/tiny.png"/>
+<div>
+<h2>Financial systems</h2>
+<ul>
+<li>Live financial models</li>
+<li>
+Incremental computation<br />
+with dependency graph
+</li>
+</ul>
+</div>
+<div class="fragment">
+<h2>Interesting programming systems</h2>
+<ul>
+<li>Live programming systems</li>
+<li>Future more usable programming tools!</li>
+</ul>
+</div>
+</div>
+<img src="img/cuni.png" class="mfflogo" /></section><section class="icons "><h1>Lessons learned</h1>
+<h2>A tiny spreadsheet system</h2>
+<ul>
+<li><i class='fa fa-diagram-project'></i> Computation as dependency graph</li>
+<li><i class='fa fa-table-cells'></i> Working with two-dimensional grid</li>
+<li><i class='fa fa-shapes'></i> Abstracting from concrete computations</li>
+<li><i class='fa fa-code'></i> Good old ML-like expression interpreter</li>
+</ul>
+<img src="img/cuni.png" class="mfflogo" /></section></section><section><section class="content "><div class="body">
+<div>
+<p><a href="https://direct.mit.edu/books/book/3071/Spreadsheet-Implementation-TechnologyBasics-and
+(hard">https://direct.mit.edu/books/book/3071/Spreadsheet-Implementation-TechnologyBasics-and
+(hard</a> to get...)</p>
+<p><a href="https://www.theregister.com/2020/12/04/microsoft_excel_lambda/">https://www.theregister.com/2020/12/04/microsoft_excel_lambda/</a></p>
+<p><a href="https://www.felienne.com/archives/2974">https://www.felienne.com/archives/2974</a></p>
+<p><a href="https://arxiv.org/ftp/arxiv/papers/1807/1807.08578.pdf">https://arxiv.org/ftp/arxiv/papers/1807/1807.08578.pdf</a></p>
+<p><a href="https://theconversation.com/the-reinhart-rogoff-error-or-how-not-to-excel-at-economics-13646">https://theconversation.com/the-reinhart-rogoff-error-or-how-not-to-excel-at-economics-13646</a></p>
+<p><a href="https://genomebiology.biomedcentral.com/articles/10.1186/s13059-016-1044-7">https://genomebiology.biomedcentral.com/articles/10.1186/s13059-016-1044-7</a></p>
+<p><a href="https://advait.org/publications-web/sarkar-2018-spreadsheet-learning">https://advait.org/publications-web/sarkar-2018-spreadsheet-learning</a></p>
+</div>
+</div>
+<img src="img/cuni.png" class="mfflogo" /></section></section>
+			</div>
+		</div>
+
+		<script src="reveal/reveal.js"></script>
+		<link rel="stylesheet" href="reveal/plugin/highlight/style.css">
+		<script src="reveal/plugin/highlight/highlight.js"></script>
+		<script src="reveal/plugin/math/math.js"></script>
+		<script language="javascript" type="text/javascript">
+			Reveal.initialize({
+				plugins: [ RevealHighlight, RevealMath.KaTeX ],
+				hash:true,
+				pdfSeparateFragments: false,
+				transition:"none",
+				controls:false
+			});
+			websocket = new WebSocket("ws://" + window.location.host + "/websocket");
+			websocket.onmessage = function (evt) {
+				window.setTimeout(function(){ window.location.reload(); }, 1000);
+			};
+		</script>
+
+	</body>
+</html>
