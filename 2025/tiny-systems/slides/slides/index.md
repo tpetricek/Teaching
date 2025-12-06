@@ -28,7 +28,4 @@ _<i class="fa-solid fa-circle-right"></i>_ https://d3s.mff.cuni.cz/teaching/nprg
 1. [**Lab - TinyHM**: Tiny Hindley-Milner type inference](tinyhm.html)  
 1. [**Lab - TinyProlog**: Tiny declarative logic programming language](tinyprolog.html)  
 1. [**Lab - TinySelf**: Tiny prototype-based object-oriented language](tinyself.html)  
-
-<!--
 1. [**Lab - TinyExcel**: Tiny incremental spreadsheet system](tinyexcel.html)  
--->
