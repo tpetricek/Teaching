@@ -1,0 +1,458 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Principles of Programming Languages - Lab #1 (NPRG084)</title>
+		<link rel="stylesheet" href="reveal/reveal.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+		<style type="text/css">
+
+ 			@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400&family=Roboto:ital,wght@0,100;0,300;0,700;1,100&family=Titillium+Web:wght@200;400;600&display=swap');
+			.reveal .slides {
+				text-align:left;
+				xbackground:yellow;
+				color:#003657;
+			}
+			section {
+				height:620px; /* 700-60 */
+				width:900px !important; /* 960-60 */
+				padding:40px 30px 40px 30px;
+			}
+			.overview section {
+				width:960px !important;
+			}
+			h1 {
+				font:600 44pt 'Titillium Web', sans-serif;
+				padding:0px;
+				margin:0px;
+				color:#d22d40;
+				line-height:1.2em;
+			}
+			h2 {
+				font:200 40pt 'Titillium Web', sans-serif;
+				line-height:1.2em;
+				padding:0px;
+				margin:0px 0px 50px 0px;
+			}
+			p, li {
+				font:100 30pt 'Roboto', sans-serif;
+				margin:0px;
+				padding:0px;
+			}
+			h3 {
+				font:700 30pt 'Roboto', sans-serif;
+				margin:0px;
+				padding:0px;
+			}
+			h3 em {
+				font-style:normal;
+				font-weight:300;
+			}
+			strong {
+				font-weight:300;
+			}
+			a {
+				text-decoration:none;
+				color:#0065A0;
+			}
+			a:hover, a:active {
+				color:#0081CC;
+			}
+
+			blockquote p {
+				font-style:italic;
+			}
+
+			p code, li code {
+				font:400 22pt 'Roboto Mono', monospace;
+			}
+			pre code {
+				font:400 17pt 'Roboto Mono', monospace;
+			}
+			.smallcode pre code {
+				font-size:15pt;
+			}
+
+			pre {
+				margin:25px 0px 25px 50px;
+			}
+
+			.hljs-comment { color:#008000 !important; }
+
+			i { width:56px; text-align:left; }
+
+			.math { font-size:20pt; }
+
+			.lists p, .lists li { font-size:26pt; }
+			.lists ul { margin:10px 0px 40px 40px; padding:0px; }
+			.lists p { margin:10px 0px 40px 0px; }
+			.lists h1 { margin-bottom:40px; }
+			.lists h2 { margin:0px; padding:0px; font:300 30pt 'Roboto', sans-serif; }
+			.lists .decor { margin-top:20px; float:right; max-width:350px; max-height:400px; border:3px solid black; }
+			.lists .decor pre { margin:15px; padding:0px; }
+			.reveal .lists .body img { border:3px solid black; margin-top:20px; float:right; max-width:280px; max-height:350px; }
+			.reveal .lists.bigger .body img { max-width:340px; max-height:350px; }
+			.reveal .lists.smaller .body img { max-width:200px; max-height:200px; }
+			.reveal .lists.noborder .body img { border-style:none; }
+			.lists.condensed p, .lists.condensed li { font-size:24pt }
+			.lists.condensed p { margin:5px 0px 20px 0px; }
+			.lists.condensed h2 { font-size:28pt; }
+			.lists.condensed h1 { margin-bottom: 20px; }
+
+
+			.content h1 { margin-bottom:40px; }
+			.content h2 { margin-top:-40px; }
+			.content h3 { font-size:26pt; margin-bottom:20px; margin-top:40px; }
+			.content p { margin-bottom:20px; }
+			.content p, .content li { font-size:26pt; }
+			.content.condensed h1 { margin-bottom:10px; }
+			.content.condensed p, .content.condensed li { font-size:22pt; }
+			.content.two-column .body div { width:450px; float:left; }
+			.content.three-column .body div { width:280px; margin-left:10px; margin-right:10px; float:left; }
+			.content.two-column pre, .content.two-column blockquote { margin-left:0px; }
+			.content.three-column img { max-width:200px; text-align:center; }
+			.content.three-column.smaller img { max-width:140px; text-align:center; margin-left:40px; }
+			.content img { max-width:100%; max-height:450px; border:3px solid black; }
+			.content.noborder img { border-style:none; }
+			.content.three-column h3, .content.two-column h3 { margin-bottom:30px; margin-top:0px; }
+
+			.largeicons p, .largeicons li { font-size:26pt; }
+			.largeicons h2, .icons h2 { margin-bottom:0px; }
+			.largeicons li, .icons li { list-style-type:none; padding:0px; margin:15px 0px 15px 0px; }
+			.largeicons ul, .icons ul { margin:50px 0px 0px 0px;padding:0px; }
+			.largeicons i.placeholder, .icons i.placeholder { width:65px; display:inline-block; }
+
+			.title h1 { margin-bottom:40px; }
+			.title h2 { margin-top:-40px; font-weight:200; }
+			.title.swapped h1 { font-size:34pt; font-weight:200; margin-top:20px; }
+			.title.swapped h2 { margin-top:-30px; color:#d22d40; font-weight:400; }
+			.title h2 strong { font-weight:400; }
+			.title .body { position:absolute; bottom:40px; width:900px; }
+			.title .body p { margin:0px 0px 20px 0px; padding:0px; font-size:24pt; }
+			.title i { font-size:80%; width:32px; margin:0px 0px 0px 4px; }
+
+			.image .body1 { width:520px;margin-right:30px;height:620px;float:left;text-align:center; }
+			.image .body1 p { margin:50px 0px 0px 0px; }
+			.image .body1 img { max-width:500px;max-height:500px; border:3px solid black; }
+			.image h1 { font-size:32pt; margin-bottom:30px; }
+			.image h2 { font-size:32pt; margin-top:-30px; color:#d22d40; font-weight:400; }
+			.image p { margin-top:20px; font-size:26pt; }
+			.image .citation p { margin-top:-25px; margin-bottom:30px; }
+			.image.smaller .body1 { width:460px; }
+			.image.smaller .body1 img { max-width:440px; }
+			.image.smaller2x .body1 { width:420px; }
+			.image.smaller2x .body1 img { max-width:380px; }
+			.image.noborder img { border-style:none; }
+			.image li { margin:0px; font-size:26pt; }
+			.image ul { position:relative; left:35px; }
+
+			.code .body1 { width:520px;margin-right:30px;height:620px;float:left;}
+			.code h1 { font-size:32pt; margin-bottom:30px; }
+			.code h2 { font-size:32pt; margin-top:-30px; color:#d22d40; font-weight:400; }
+			.code p { margin-top:20px; font-size:26pt; }
+			.code li { margin:0px; font-size:26pt; }
+			.code ul { position:relative; left:35px; }
+			.code .citation p { margin-top:-25px; margin-bottom:30px; }
+			.code.smaller .body1 { width:460px; }
+      .code.larger .body1 { width:560px; }
+
+			section.subtitle { height:auto; }
+			section.subtitle .body { padding:215px 0px 215px 0px; }
+
+			.mfflogo { position:absolute; right:30px; bottom:0px; width:140px; border-style:none !important; }
+			.nologo .mfflogo { display:none; }
+			@media print { .mfflogo { right:0px; bottom:0px; width:100px; } }
+
+			/* DECK-SPECIFIC */
+			#qr { position:absolute; right:-50px; bottom:-30px; width:150px; border:60px solid white; }
+		</style>
+	</head>
+	<body>
+
+		<div class="reveal">
+			<div class="slides">
+				<section><section class="title  slide1"><h1>NPRG084</h1>
+<h2><strong>Lab #1</strong>: Welcome &amp; Lambda Calculus</h2>
+<div class="body">
+<p><strong>Tomáš Petříček</strong>, 204 (2nd floor)<br />
+<em><i class="fa-brands fa-discord"></i></em> Materials available via course Discord!<br />
+<em><i class="fa fa-envelope"></i></em> <a href="mailto:petricek@d3s.mff.cuni.cz">petricek@d3s.mff.cuni.cz</a><br />
+<em><i class="fa-solid fa-circle-right"></i></em> <a href="https://tomasp.net"><a href="https://tomasp.net">https://tomasp.net</a></a> | <a href="https://bsky.app/profile/tomasp.net">@tomasp.net</a></p>
+</div>
+<img src="img/cuni.png" class="mfflogo" /></section></section><section><section class="subtitle  slide2"><div class="body">
+<h1>Welcome</h1>
+<h2>Labs structure &amp; credits</h2>
+</div>
+<img src="img/cuni.png" class="mfflogo" /></section><section class="lists  slide3"><div class="body">
+<h1>Principles of Programming Languages</h1>
+<img src="img/lab01/eniac.jpg"/>
+<div>
+<h2>Lectures</h2>
+<ul>
+<li>Languages as subject of study</li>
+<li>Essential concepts</li>
+<li>Functional, OOP, imperative</li>
+</ul>
+</div>
+<div class="fragment">
+<h2>Labs</h2>
+<ul>
+<li>Hands-on exploration</li>
+<li>How key concepts actually work</li>
+<li>Writing tiny interpreters</li>
+</ul>
+</div>
+</div>
+<style>.slide3 h1 { font-size:41pt; }</style><img src="img/cuni.png" class="mfflogo" /></section><section class="icons  slide4"><h1>Labs</h1>
+<h2>What to expect</h2>
+<ul>
+<li><i class='fa fa-box-archive'></i> Based on Tiny Systems course (NPRG077)</li>
+<li><i class='fa fa-pen-to-square'></i> Complete TODOs in a code skeleton</li>
+<li><i class='fa fa-clock-rotate-left'></i> Hands-on 3 hour labs with laptops</li>
+<li><i class='fa fa-comments'></i> Please ask me and/or your neighbors!</li>
+<li><i class='fa fa-calendar-days'></i> Schedule is somewhat irregular, sorry...</li>
+</ul>
+<img src="img/cuni.png" class="mfflogo" /></section><section class="content  slide5"><h1>Labs - Preliminary schedule</h1>
+<div class="body">
+<div>
+<p><strong>Room S10, Fridays 10:40-13:40</strong></p>
+<ul>
+<li><strong>7. Feb</strong> - Welcome &amp; Lambda calculus</li>
+<li><strong>20. March</strong> - ML-like language interpreter</li>
+<li><strong>27. March</strong> - Data types and type checking</li>
+<li><strong>17. April</strong> - Imperative BASIC interpreter</li>
+<li><strong>24. April</strong> - Object-oriented languages (TBC)</li>
+<li><strong>22. May</strong> - Logic programming &amp; unification</li>
+</ul>
+</div>
+</div>
+<style>.slide5 p, li { font-size:30pt; margin-bottom:6px; } .slide5  p { margin-bottom:30px; }</style><img src="img/cuni.png" class="mfflogo" /></section><section class="lists noborder slide6"><div class="body">
+<h1>Labs - How to get credits</h1>
+<img src="img/lab01/seal.png"/>
+<div>
+<h2>The idea</h2>
+<ul>
+<li>Come to the labs &amp; do the work here</li>
+<li>aka "Active Participation"</li>
+<li>This is the easiest option!</li>
+</ul>
+</div>
+<div class="fragment">
+<h2>The details</h2>
+<ul>
+<li>Complete basic tasks for 4 out of 6 labs</li>
+<li>Send me a link to your repository</li>
+<li>Acknowledge collaboration &amp; AI use</li>
+</ul>
+</div>
+</div>
+<img src="img/cuni.png" class="mfflogo" /></section></section><section><section class="subtitle  slide7"><div class="body">
+<h1>F#</h1>
+<h2>Why and how</h2>
+</div>
+<img src="img/cuni.png" class="mfflogo" /></section><section class="lists noborder slide8"><div class="body">
+<h1>F# language - why and how</h1>
+<img src="img/lab01/fsharp.png"/>
+<div>
+<h2>Code skeletons</h2>
+<ul>
+<li>Code structure in F# with TODOs</li>
+<li>Just fill in the missing parts</li>
+<li>F# not required...</li>
+</ul>
+</div>
+<div class="fragment">
+<h2>Why stick with F#</h2>
+<ul>
+<li>An interesting language to learn</li>
+<li>I can help you debug issues!</li>
+<li>Good editor and libraries</li>
+<li>Functional language is a great fit</li>
+</ul>
+</div>
+</div>
+<img src="img/cuni.png" class="mfflogo" /></section><section class="image  slide9"><div class="body1">
+<p><img src="img/lab01/ionide.png" alt="" /></p>
+</div><div class="body2">
+<div class="body">
+<div>
+<h1>Getting F#</h1>
+<p><strong>Install .NET SDK</strong><br />
+<strong>Install VS Code</strong><br />
+<strong>Install Ionide</strong></p>
+<p><a href="https://www.fsharp.org">www.fsharp.org</a><br />
+<a href="https://www.ionide.io">www.ionide.io</a></p>
+<p>Other editors work, but setup auto-complete &amp; background checking</p>
+</div>
+</div>
+</div>
+<img src="img/cuni.png" class="mfflogo" /></section><section class="icons  slide10"><h1>Introducing F#</h1>
+<h2>Language and program structure</h2>
+<ul>
+<li><i class='fa fa-angles-right'></i> Program by composing expressions</li>
+<li><i class='fa fa-hashtag'></i> Everything evaluates to a value</li>
+<li><i class='fa fa-not-equal'></i> Statically typed with inference</li>
+<li><i class='fa fa-filter'></i> Abstraction using functions</li>
+</ul>
+<img src="img/cuni.png" class="mfflogo" /></section><section class="subtitle  slide11"><div class="body">
+<h1>DEMO</h1>
+<h2>Introducing F#</h2>
+</div>
+<img src="img/cuni.png" class="mfflogo" /></section><section class="icons  slide12"><h1>F# Data types</h1>
+<h2>Representing information in F#</h2>
+<ul>
+<li><i class='fa fa-circle-dot'></i> <strong>Int, strings, etc.</strong> - primitive types</li>
+<li><i class='fa fa-circle-xmark'></i> <strong>Records, tuples</strong> - representing combination</li>
+<li><i class='fa fa-circle-plus'></i> <strong>Discriminated unions</strong> - representing choice</li>
+<li><i class='fa fa-circle-pause'></i> <strong>Lists, arrays</strong> - representing repetition</li>
+<li><i class='fa fa-circle-exclamation'></i> <strong>More types...</strong> - objects, interfaces, ...</li>
+</ul>
+<img src="img/cuni.png" class="mfflogo" /></section><section class="subtitle  slide13"><div class="body">
+<h1>DEMO</h1>
+<h2>Tuples, records, unions in F#</h2>
+</div>
+<img src="img/cuni.png" class="mfflogo" /></section><section class="code smaller slide14"><div class="body1">
+<pre><code class="language-fsharp">type Expr =
+  | Number of int
+  | Mul of Expr * Expr
+  | Div of Expr * Expr
+</code></pre>
+</div><div class="body2">
+<div class="body">
+<div>
+<h1>Writing interpreters</h1>
+<p><strong>Discriminated unions</strong><br />
+For representing programs</p>
+</div>
+</div>
+</div>
+<img src="img/cuni.png" class="mfflogo" /></section><section class="code smaller slide15"><div class="body1">
+<pre><code class="language-fsharp">type Expr =
+  | Number of int
+  | Mul of Expr * Expr
+  | Div of Expr * Expr
+
+// Evaluate a given expression
+eval : Expr -&gt; int
+
+// Returns 'None' when
+// evaluation fails because of
+// division by zero
+safeEval : Expr -&gt; option&lt;int&gt;
+</code></pre>
+</div><div class="body2">
+<div class="body">
+<div>
+<h1>Writing interpreters</h1>
+<p><strong>Discriminated unions</strong><br />
+For representing programs</p>
+<p><strong>Recursive functions</strong><br />
+For implementing logic</p>
+<p><strong>Option types</strong><br />
+For representing errors!</p>
+</div>
+</div>
+</div>
+<img src="img/cuni.png" class="mfflogo" /></section><section class="subtitle  slide16"><div class="body">
+<h1>DEMO</h1>
+<h2>Arithmetic expressions</h2>
+</div>
+<img src="img/cuni.png" class="mfflogo" /></section></section><section><section class="subtitle  slide17"><div class="body">
+<h1>Lambda calculus</h1>
+<h2>Code structure and steps</h2>
+</div>
+<img src="img/cuni.png" class="mfflogo" /></section><section class="code smaller slide18"><div class="body1">
+<pre><code class="language-fsharp">// A term can be...
+type Term =
+
+  // 1. lambda term with
+  // variable name &amp; body
+  | Lambda of string * Term
+
+  // 2. application with
+  // function &amp; argument
+  | Application of Term * Term
+
+  // 3. reference to variable
+  | Variable of string
+</code></pre>
+</div><div class="body2">
+<div class="body">
+<div>
+<h1>Representing terms</h1>
+<p><strong>Discriminated union!</strong></p>
+<p>Example term <span class="math">\(\lambda x.x\)</span></p>
+<pre><code class="language-text">Lambda("x", Variable("x"))
+</code></pre>
+<p>Example term <span class="math">\((\lambda x.x) y\)</span>:</p>
+<pre><code class="language-text">Application(
+  Lambda("x", Variable("x")),
+    Variable("y"))
+</code></pre>
+</div>
+</div>
+</div>
+<style>.slide18 .body2 pre { font-size:20pt; margin-top:8px; } .slide18  .body2 pre code { margin-left:20px; }</style><img src="img/cuni.png" class="mfflogo" /></section><section class="code larger slide19"><div class="body1">
+<pre><code class="language-fsharp">// Replace variable of a given name
+// with a given term, in a given term
+// returning a new term
+subst : string -&gt; Term -&gt; Term -&gt; Term
+
+// Produce string representation
+format : Term -&gt; string
+
+// Try to reduce a term. Returns
+// reduced term or 'None' if impossible
+reduce : Term -&gt; Option&lt;Term&gt;
+
+// Apply 'reduce' as many times as
+// possible and return the result
+reduceAll : Term -&gt; Term
+</code></pre>
+</div><div class="body2">
+<div class="body">
+<div>
+<h1>Implementing core logic</h1>
+<p><strong>Recursive functions!</strong></p>
+<p>Arrow is right associative</p>
+<p>Function types tell us a lot about what they do</p>
+</div>
+</div>
+</div>
+<img src="img/cuni.png" class="mfflogo" /></section><section class="content  slide20"><h1>Lab #1 - Tasks</h1>
+<div class="body">
+<div>
+<ul>
+<li><strong>Basic 1</strong> - Implement variable substitution</li>
+<li><strong>Basic 2</strong> - Implement pretty printing of terms</li>
+<li><strong>Basic 3</strong> - Implement call-by-name reduction</li>
+<li><strong>Basic 4</strong> - Implement call-by-value reduction</li>
+<li><strong>Demo</strong> - Y combinator and CBV vs. CBN</li>
+<li><strong>Bonus</strong> - Calculating with Church numerals</li>
+</ul>
+</div>
+</div>
+<style>.slide20 p, li { font-size:30pt; margin-bottom:6px; } .slide20  p { margin-bottom:30px; }</style><img src="img/cuni.png" class="mfflogo" /></section></section>
+			</div>
+		</div>
+
+		<script src="reveal/reveal.js"></script>
+		<link rel="stylesheet" href="reveal/plugin/highlight/style.css">
+		<script src="reveal/plugin/highlight/highlight.js"></script>
+		<script src="reveal/plugin/math/math.js"></script>
+		<script language="javascript" type="text/javascript">
+			Reveal.initialize({
+				plugins: [ RevealHighlight, RevealMath.KaTeX ],
+				hash:true,
+				pdfSeparateFragments: false,
+				transition:"none",
+				controls:false
+			});
+			websocket = new WebSocket("ws://" + window.location.host + "/websocket");
+			websocket.onmessage = function (evt) {
+				window.setTimeout(function(){ window.location.reload(); }, 1000);
+			};
+		</script>
+
+	</body>
+</html>
