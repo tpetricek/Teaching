@@ -1,0 +1,7 @@
+framework: net70
+generate_load_scripts: true
+source https://api.nuget.org/v3/index.json
+
+storage: packages
+nuget FSharp.Formatting
+nuget Suave

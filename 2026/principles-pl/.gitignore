@@ -1,0 +1,5 @@
+output/
+packages/
+paket-files/
+.paket/load
+.paket/*.targets
