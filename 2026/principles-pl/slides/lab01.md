@@ -300,9 +300,7 @@ Function types tell us a lot about what they do
 
 # Lab #1 - Tasks
 
-- **Basic 1** - Implement variable substitution
-- **Basic 2** - Implement pretty printing of terms
-- **Basic 3** - Implement call-by-name reduction
-- **Basic 4** - Implement call-by-value reduction
-- **Demo** - Y combinator and CBV vs. CBN
-- **Bonus** - Calculating with Church numerals
+- **1. Basic** - Substitution, printing & free variables
+- **2. Basic** - Call-by-name reduction strategy
+- **3. Basic** - Call-by-value reduction strategy
+- **4. (Bonus)** - Calculating with Church numerals
