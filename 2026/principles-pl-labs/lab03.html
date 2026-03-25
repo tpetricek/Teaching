@@ -1,0 +1,463 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<title>Principles of Programming Languages - Lab #3 (NPRG084)</title>
+		<link rel="stylesheet" href="reveal/reveal.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+		<style type="text/css">
+
+ 			@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400&family=Roboto:ital,wght@0,100;0,300;0,700;1,100&family=Titillium+Web:wght@200;400;600&display=swap');
+			.reveal .slides {
+				text-align:left;
+				xbackground:yellow;
+				color:#003657;
+			}
+			section {
+				height:620px; /* 700-60 */
+				width:900px !important; /* 960-60 */
+				padding:40px 30px 40px 30px;
+			}
+			.overview section {
+				width:960px !important;
+			}
+			h1 {
+				font:600 44pt 'Titillium Web', sans-serif;
+				padding:0px;
+				margin:0px;
+				color:#d22d40;
+				line-height:1.2em;
+			}
+			h2 {
+				font:200 40pt 'Titillium Web', sans-serif;
+				line-height:1.2em;
+				padding:0px;
+				margin:0px 0px 50px 0px;
+			}
+			p, li {
+				font:100 30pt 'Roboto', sans-serif;
+				margin:0px;
+				padding:0px;
+			}
+			h3 {
+				font:700 30pt 'Roboto', sans-serif;
+				margin:0px;
+				padding:0px;
+			}
+			h3 em {
+				font-style:normal;
+				font-weight:300;
+			}
+			strong {
+				font-weight:300;
+			}
+			a {
+				text-decoration:none;
+				color:#0065A0;
+			}
+			a:hover, a:active {
+				color:#0081CC;
+			}
+
+			blockquote p {
+				font-style:italic;
+			}
+
+			p code, li code {
+				font:400 22pt 'Roboto Mono', monospace;
+			}
+			pre code {
+				font:400 17pt 'Roboto Mono', monospace;
+			}
+			.smallcode pre code {
+				font-size:15pt;
+			}
+
+			pre {
+				margin:25px 0px 25px 50px;
+			}
+
+			.hljs-comment { color:#008000 !important; }
+
+			i { width:56px; text-align:left; }
+
+			.math { font-size:20pt; }
+
+			.lists p, .lists li { font-size:26pt; }
+			.lists ul { margin:10px 0px 40px 40px; padding:0px; }
+			.lists p { margin:10px 0px 40px 0px; }
+			.lists h1 { margin-bottom:40px; }
+			.lists h2 { margin:0px; padding:0px; font:300 30pt 'Roboto', sans-serif; }
+			.lists .decor { margin-top:20px; float:right; max-width:350px; max-height:400px; border:3px solid black; }
+			.lists .decor pre { margin:15px; padding:0px; }
+			.reveal .lists .body img { border:3px solid black; margin-top:20px; float:right; max-width:280px; max-height:350px; }
+			.reveal .lists.bigger .body img { max-width:340px; max-height:350px; }
+			.reveal .lists.smaller .body img { max-width:200px; max-height:200px; }
+			.reveal .lists.noborder .body img { border-style:none; }
+			.lists.condensed p, .lists.condensed li { font-size:24pt }
+			.lists.condensed p { margin:5px 0px 20px 0px; }
+			.lists.condensed h2 { font-size:28pt; }
+			.lists.condensed h1 { margin-bottom: 20px; }
+
+
+			.content h1 { margin-bottom:40px; }
+			.content h2 { margin-top:-40px; }
+			.content h3 { font-size:26pt; margin-bottom:20px; margin-top:40px; }
+			.content p { margin-bottom:20px; }
+			.content p, .content li { font-size:26pt; }
+			.content.condensed h1 { margin-bottom:10px; }
+			.content.condensed p, .content.condensed li { font-size:22pt; }
+			.content.two-column .body div { width:450px; float:left; }
+			.content.three-column .body div { width:280px; margin-left:10px; margin-right:10px; float:left; }
+			.content.two-column pre, .content.two-column blockquote { margin-left:0px; }
+			.content.three-column img { max-width:200px; text-align:center; }
+			.content.three-column.smaller img { max-width:140px; text-align:center; margin-left:40px; }
+			.content img { max-width:100%; max-height:450px; border:3px solid black; }
+			.content.noborder img { border-style:none; }
+			.content.three-column h3, .content.two-column h3 { margin-bottom:30px; margin-top:0px; }
+
+			.largeicons p, .largeicons li { font-size:26pt; }
+			.largeicons h2, .icons h2 { margin-bottom:0px; }
+			.largeicons li, .icons li { list-style-type:none; padding:0px; margin:15px 0px 15px 0px; }
+			.largeicons ul, .icons ul { margin:50px 0px 0px 0px;padding:0px; }
+			.largeicons i.placeholder, .icons i.placeholder { width:65px; display:inline-block; }
+
+			.title h1 { margin-bottom:40px; }
+			.title h2 { margin-top:-40px; font-weight:200; }
+			.title.swapped h1 { font-size:34pt; font-weight:200; margin-top:20px; }
+			.title.swapped h2 { margin-top:-30px; color:#d22d40; font-weight:400; }
+			.title h2 strong { font-weight:400; }
+			.title .body { position:absolute; bottom:40px; width:900px; }
+			.title .body p { margin:0px 0px 20px 0px; padding:0px; font-size:24pt; }
+			.title i { font-size:80%; width:32px; margin:0px 0px 0px 4px; }
+
+			.image .body1 { width:520px;margin-right:30px;height:620px;float:left;text-align:center; }
+			.image .body1 p { margin:50px 0px 0px 0px; }
+			.image .body1 img { max-width:500px;max-height:500px; border:3px solid black; }
+			.image h1 { font-size:32pt; margin-bottom:30px; }
+			.image h2 { font-size:32pt; margin-top:-30px; color:#d22d40; font-weight:400; }
+			.image p { margin-top:20px; font-size:26pt; }
+			.image .citation p { margin-top:-25px; margin-bottom:30px; }
+			.image.smaller .body1 { width:460px; }
+			.image.smaller .body1 img { max-width:440px; }
+			.image.smaller2x .body1 { width:420px; }
+			.image.smaller2x .body1 img { max-width:380px; }
+			.image.noborder img { border-style:none; }
+			.image li { margin:0px; font-size:26pt; }
+			.image ul { position:relative; left:35px; }
+
+			.code .body1 { width:520px;margin-right:30px;height:620px;float:left;}
+			.code h1 { font-size:32pt; margin-bottom:30px; }
+			.code h2 { font-size:32pt; margin-top:-30px; color:#d22d40; font-weight:400; }
+			.code p { margin-top:20px; font-size:26pt; }
+			.code li { margin:0px; font-size:26pt; }
+			.code ul { position:relative; left:35px; }
+			.code .citation p { margin-top:-25px; margin-bottom:30px; }
+			.code.smaller .body1 { width:460px; }
+      .code.larger .body1 { width:560px; }
+
+			section.subtitle { height:auto; }
+			section.subtitle .body { padding:215px 0px 215px 0px; }
+
+			.mfflogo { position:absolute; right:30px; bottom:0px; width:140px; border-style:none !important; }
+			.nologo .mfflogo { display:none; }
+			@media print { .mfflogo { right:0px; bottom:0px; width:100px; } }
+
+			/* DECK-SPECIFIC */
+			#qr { position:absolute; right:-50px; bottom:-30px; width:150px; border:60px solid white; }
+		</style>
+	</head>
+	<body>
+
+		<div class="reveal">
+			<div class="slides">
+				<section><section class="title  slide1"><h1>NPRG084</h1>
+<h2><strong>Lab #3</strong>: Type checking ML-like programs</h2>
+<div class="body">
+<p><strong>Tomáš Petříček</strong>, 204 (2nd floor)<br />
+<em><i class="fa-brands fa-discord"></i></em> Materials available via course Discord!<br />
+<em><i class="fa fa-envelope"></i></em> <a href="mailto:petricek@d3s.mff.cuni.cz">petricek@d3s.mff.cuni.cz</a><br />
+<em><i class="fa-solid fa-circle-right"></i></em> <a href="https://tomasp.net"><a href="https://tomasp.net">https://tomasp.net</a></a> | <a href="https://bsky.app/profile/tomasp.net">@tomasp.net</a></p>
+</div>
+<img src="img/cuni.png" class="mfflogo" /></section></section><section><section class="subtitle  slide2"><div class="body">
+<h1>Types</h1>
+<h2>ML and type checking</h2>
+</div>
+<img src="img/cuni.png" class="mfflogo" /></section><section class="code  slide3"><div class="body1">
+<pre><code class="language-ocaml">(* Infer type of a variable *)
+let x = 42
+
+(* Infer more complex type *)
+let nums = [1;2;3]
+
+(* Infer type of a function *)
+let add x = x + x
+
+(* Optional type annotation *)
+let add (x:float) = x + x
+
+(* Check field access *)
+let y = { Name="Yoda"; Age = 700 }
+y.Name
+</code></pre>
+</div><div class="body2">
+<div class="body">
+<div>
+<h1>ML type checker</h1>
+<p><strong>Fully statically typed!</strong></p>
+<p>You never write types</p>
+<p>Unless you use .NET types or complex language features</p>
+<p><strong>Type inference</strong><br />
+vs. <strong>Type checking</strong></p>
+</div>
+</div>
+</div>
+<img src="img/cuni.png" class="mfflogo" /></section><section class="subtitle  slide4"><div class="body">
+<h1>Demo</h1>
+<h2>Type checking &amp; inference in F#</h2>
+</div>
+<img src="img/cuni.png" class="mfflogo" /></section><section class="lists bigger slide5"><div class="body">
+<h1>Type systems</h1>
+<img src="img/lab03/rule.png"/>
+<div>
+<h2>Typing rules</h2>
+<p>Given a typing context <span class="math">\(\Gamma\)</span>, the<br />
+expression <span class="math">\(e\)</span> has a type <span class="math">\(\tau\)</span></p>
+</div>
+<div class="fragment">
+<h2>The problem in general</h2>
+<p>We know some of these,<br />
+want to figure out the rest</p>
+</div>
+</div>
+<img src="img/cuni.png" class="mfflogo" /></section><section class="lists  slide6"><div class="body">
+<h1>Type systems</h1>
+<img src="img/lab03/qmarks.png"/>
+<div>
+<h2>Type checking</h2>
+<ul>
+<li>Know it all. Check derivation exists!</li>
+<li>Easy for syntax-driven rules</li>
+</ul>
+</div>
+<div class="fragment">
+<h2>Type inference</h2>
+<ul>
+<li>Know expression. Figure out the type!</li>
+<li>Ideally most general (best) type</li>
+</ul>
+</div>
+<div class="fragment">
+<h2>Program synthesis</h2>
+<ul>
+<li>Not very common, but interesting idea!</li>
+</ul>
+</div>
+</div>
+<img src="img/cuni.png" class="mfflogo" /></section><section class="icons  slide7"><h1>Types</h1>
+<h2>Different approaches</h2>
+<ul>
+<li><i class='fa fa-keyboard'></i> Write everything explicitly (Java)</li>
+<li><i class='fa fa-clock'></i> Infer variable types from expressions (<code>var</code>)</li>
+<li><i class='fa fa-hand-sparkles'></i> Infer most general polymorphic type</li>
+<li><i class='fa fa-dragon'></i> Bi-directional type checking (infer/check)</li>
+<li><i class='fa fa-hammer'></i> Infer expression types but annotate variables</li>
+</ul>
+<img src="img/cuni.png" class="mfflogo" /></section></section><section><section class="subtitle  slide8"><div class="body">
+<h1>ML types</h1>
+<h2>Our goals</h2>
+</div>
+<img src="img/cuni.png" class="mfflogo" /></section><section class="code  slide9"><div class="body1">
+<pre><code class="language-ocaml">(* Check expressions *)
+let num = 1 + 20
+let err = 1 + "20"
+
+(* Functions with annotations *)
+(fun (x:int) -&gt; x + 40)
+(fun (x:int*string) -&gt; snd x)
+
+(* No annotation for let *)
+let f = (fun (x:int) -&gt; x + x)
+f (f 10) + 2
+</code></pre>
+</div><div class="body2">
+<div class="body">
+<div>
+<h1>Our goal</h1>
+<p><strong>Limited type inference</strong></p>
+<p>Infer type of expressions</p>
+<p>Assuming we know types of all variables</p>
+</div>
+</div>
+</div>
+<img src="img/cuni.png" class="mfflogo" /></section><section class="code smaller slide10"><div class="body1">
+<pre><code class="language-fsharp">// POLYMORPHIC FUNCTIONS
+
+// 'a -&gt; ('a * 'a)
+let dup a = (a, a)
+
+// ('a * 'b) -&gt; ('b * 'a)
+let swap (a, b) = (b, a)
+
+// 'a -&gt; 'a
+let id v = v
+
+// INSTANTIATIONS
+
+// (int * int)
+dup 42         
+
+// (string * int)
+swap (1, "hi")
+</code></pre>
+</div><div class="body2">
+<div class="body">
+<div>
+<h1>Polymorphism</h1>
+<p><strong>Type variables</strong></p>
+<p>Placeholder for any type<br />
+Think generics in C#</p>
+</div>
+<div class="fragment">
+<p><strong>Unification</strong></p>
+<p>Expecting <code>'a * 'b</code><br />
+Argument <code>int * string</code></p>
+<p>Find substitution<br />
+<code>['a: int; 'b: string]</code></p>
+</div>
+</div>
+</div>
+<img src="img/cuni.png" class="mfflogo" /></section><section class="lists bigger slide11"><div class="body">
+<h1>Record types</h1>
+<img src="img/lab03/comtran.png"/>
+<div>
+<h2>F# record types</h2>
+<ul>
+<li>Explicitly declared type</li>
+<li><code>type Person</code><br />&nbsp;&nbsp;  <code>{ Name:string; Age:int }</code></li>
+<li>Property access <code>p.Age</code></li>
+</ul>
+</div>
+<div class="fragment">
+<h2>Structural records</h2>
+<ul>
+<li>No explicit definition</li>
+<li><code>p.Age</code> requires <code>Age:int</code></li>
+<li>Having more fields is allowed!</li>
+</ul>
+</div>
+</div>
+<img src="img/cuni.png" class="mfflogo" /></section></section><section><section class="subtitle  slide12"><div class="body">
+<h1>ML types</h1>
+<h2>Code structure and steps</h2>
+</div>
+<img src="img/cuni.png" class="mfflogo" /></section><section class="lists  slide13"><div class="body">
+<h1>Constraint solver structure</h1>
+<img src="img/lab03/constr.png"/>
+<div>
+<h2>Simplest possible example</h2>
+<ul>
+<li>Peano numbers: <code>Zero</code>, <code>Succ(x)</code></li>
+<li>Equality constraints with variables</li>
+<li>e.g. <code>Succ(x) = Succ(Succ(Zero))</code></li>
+</ul>
+</div>
+<div class="fragment">
+<h2>Creating a solver</h2>
+<ul>
+<li>Discharge matching constraints</li>
+<li>Fail on mismatching constraints</li>
+<li>Generate more for matching nested</li>
+<li>Needs to handle substitutions...</li>
+</ul>
+</div>
+</div>
+<img src="img/cuni.png" class="mfflogo" /></section><section class="subtitle  slide14"><div class="body">
+<h1>Demo</h1>
+<h2>Solving numerical constraints</h2>
+</div>
+<img src="img/cuni.png" class="mfflogo" /></section><section class="code smaller slide15"><div class="body1">
+<pre><code class="language-fsharp">
+type Type =
+  // Two primitive types
+  | Number
+  | String
+
+  // Function from t1 to t2
+  | Function of Type * Type
+
+  // Tuple with t1 and t2
+  | Tuple of Type * Type
+
+  // Later additions
+  | TypeVariable of string
+
+  // Record type
+  | Record of Map&lt;string, Type&gt;
+</code></pre>
+</div><div class="body2">
+<div class="body">
+<div>
+<h1>Recursive data type!</h1>
+<ul>
+<li><code>int</code> (primitive)</li>
+<li><code>string</code> (primitive)</li>
+<li><code>int -&gt; int</code></li>
+<li><code>int * string</code></li>
+<li><code>'a</code> (type variable)</li>
+<li>anonymous records</li>
+</ul>
+</div>
+</div>
+</div>
+<img src="img/cuni.png" class="mfflogo" /></section><section class="content  slide16"><h1>Most important functions</h1>
+<div class="body">
+<div>
+<p>Check expression and infer the resulting type</p>
+<pre><code class="language-fsharp">typeCheck : Expression -&gt; Type
+</code></pre>
+<p>Unification for solving type variables</p>
+<pre><code class="language-fsharp">unify : list&lt;Type * Type&gt; -&gt; Map&lt;string, Type&gt;
+</code></pre>
+<p>Substitution to replace type variables</p>
+<pre><code class="language-fsharp">substitute : Map&lt;string, Type&gt; -&gt; Type -&gt; Type
+</code></pre>
+</div>
+</div>
+<img src="img/cuni.png" class="mfflogo" /></section><section class="content  slide17"><h1>Lab #3 - Tasks</h1>
+<div class="body">
+<div>
+<ul>
+<li><strong>0. (Demo)</strong> - Numerical constraint solver</li>
+<li><strong>1. Basic</strong> - Simple type checker</li>
+<li><strong>2. Basic</strong> - Adding functions and let</li>
+<li><strong>3. Basic</strong> - Supporting tuple types</li>
+<li><strong>4. Basic</strong> - Adding limited polymorphism</li>
+<li><strong>5. (Bonus)</strong> - Checking records with subtyping</li>
+</ul>
+</div>
+</div>
+<style>.slide17 p, li { font-size:30pt; margin-bottom:6px; } .slide17  p { margin-bottom:30px; }</style><img src="img/cuni.png" class="mfflogo" /></section></section>
+			</div>
+		</div>
+
+		<script src="reveal/reveal.js"></script>
+		<link rel="stylesheet" href="reveal/plugin/highlight/style.css">
+		<script src="reveal/plugin/highlight/highlight.js"></script>
+		<script src="reveal/plugin/math/math.js"></script>
+		<script language="javascript" type="text/javascript">
+			Reveal.initialize({
+				plugins: [ RevealHighlight, RevealMath.KaTeX ],
+				hash:true,
+				pdfSeparateFragments: false,
+				transition:"none",
+				controls:false
+			});
+			websocket = new WebSocket("ws://" + window.location.host + "/websocket");
+			websocket.onmessage = function (evt) {
+				window.setTimeout(function(){ window.location.reload(); }, 1000);
+			};
+		</script>
+
+	</body>
+</html>
