@@ -277,7 +277,7 @@ typeCheck : Expression -> Type
 Unification for solving type variables
 
 ```fsharp
-unify : list<Type * Type> -> Map<string, Type>
+unify : list<Type * Type> -> option<Map<string, Type>>
 ```
 
 Substitution to replace type variables

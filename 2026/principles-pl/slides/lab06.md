@@ -1,0 +1,383 @@
+- title: Principles of Programming Languages - Lab #6 (NPRG084)
+
+*****************************************************************************************
+- template: title
+
+# NPRG084
+## **Lab #6**: Logic programming
+
+---
+
+**Tomáš Petříček**, 204 (2nd floor)  
+_<i class="fa-brands fa-discord"></i>_ Materials available via course Discord!  
+_<i class="fa fa-envelope"></i>_ [petricek@d3s.mff.cuni.cz](mailto:petricek@d3s.mff.cuni.cz)  
+_<i class="fa-solid fa-circle-right"></i>_ [https://tomasp.net](https://tomasp.net) | [@tomasp.net](https://bsky.app/profile/tomasp.net)  
+
+-----------------------------------------------------------------------------------------
+- template: icons
+
+# Logic programming
+
+- *fa-receipt* **Declarative style** - specify what, but not how
+- *fa-list-check* Programs consists of **facts and rules**
+- *fa-lightbulb* Evaluation by clever **inference engine**
+- *fa-database* **Prolog, Datalog** and basis of other systems
+- *fa-language* Origins in AI and **natural language**
+
+-----------------------------------------------------------------------------------------
+- template: content
+- class: noborder two-column
+
+# From inference to programming
+
+### Type inference
+
+- Program analysis
+- Generated constraints
+- Unification of types
+- Infer type assignment
+- Unification + substitution
+
+----
+
+### Logic programming
+
+- Program evaluation
+- Handwritten programs
+- Unification of terms
+- Infer variable assignment
+- Unification + substitution
+
+-----------------------------------------------------------------------------------------
+- template: image
+
+![](img/lab06/shrdlu.png)
+
+# A bit of history
+
+Natural language processing in the late 1960s & early 1970s
+
+**SHRDLU, PLANNER**
+
+"Find a block which is taller than the one you are holding and put it into the box."
+
+-----------------------------------------------------------------------------------------
+- template: lists
+- class: noborder
+
+# Prolog then and now
+
+![](img/lab06/swi.png)
+
+## Alain Colmerauer, Marseilles (1972)
+
+- Natural language processing
+- Automatic theorem proving
+
+## Fifth generation systems (1980s)
+
+- 10 year initiative in Japan
+- Epoch-making knowledge processing
+
+## Prolog and Datalog today
+
+- Used in real-world in specialized domains
+- Basis of many reasoning & solving systems
+
+-----------------------------------------------------------------------------------------
+- template: lists
+
+# Prolog "Hello world"
+
+![](img/lab06/british.jpg)
+
+## Family tree querying
+
+- Simple database querying
+- Search for data patterns
+- Grandparent (parent of a parent)  
+  Father (parent who is male)
+
+## List processing
+
+- Linked lists with "cons" and "nil"
+- Matching lists with patterns
+- Many functions become multi-purpose
+
+-----------------------------------------------------------------------------------------
+- template: subtitle
+
+# Demo
+## Family tree and lists
+
+*****************************************************************************************
+- template: subtitle
+
+# Logic programming
+## Unification and resolution
+
+-----------------------------------------------------------------------------------------
+- template: image
+
+![](img/lab06/structure.png)
+
+# TinyProlog programs
+
+**Program is a list of clauses which are:**
+
+1) Rules (head + body)
+2) Facts (head)
+
+**A term can be:**
+
+1) Variable  
+2) Atom  
+3) Predicate  
+
+-----------------------------------------------------------------------------------------
+- template: lists
+
+# Theory behind resolution
+
+![](img/lab06/lt.png)
+
+## Prolog programs as logic clauses
+
+- Horn clause: $A \leftarrow B_1 \wedge B_2 \wedge \ldots \wedge B_n$  
+- Equivalent: $A \vee \neg B_1 \vee \neg B_2 \vee \ldots \vee \neg B_n$
+
+## SLD resolution in Prolog
+
+- Sound and refutation-complete  
+  resolution for Horn clauses
+- Will prove 'false' if possible
+
+-----------------------------------------------------------------------------------------
+- template: content
+
+# Variables in Prolog clauses
+
+Universally quantified over formula, existentially over body
+
+$\forall x \forall y (grandparent(x, y) \leftarrow \exists z (parent(x, z) \wedge parent(z, y)))$  
+
+---
+
+Transformed using standard logical operations
+
+$\forall x \forall y (grandparent(x, y) \vee \neg \exists z (parent(x, z) \wedge parent(z, y)))$
+$\forall x \forall y (grandparent(x, y) \vee \forall z \neg (parent(x, z) \wedge parent(z, y)))$
+$\forall x \forall y \forall z (grandparent(x, y) \vee \neg parent(x, z) \vee \neg parent(z, y))$
+
+---
+
+We need to use free variables when applying rule!
+
+-----------------------------------------------------------------------------------------
+- template: largeicons
+
+# Prolog resolution logic
+
+- *fa-magnifying-glass* **Start with user query as the goal**  
+  Single (or multiple) term(s) with unbound variables
+
+- *fa-cat* **Find applicable rule/fact by matching its head**  
+  Unification to check if the rule can be applied
+
+- *fa-book* **Generate substitution from the matching**  
+  Substitution generated by unification process  
+
+- *fa-rotate-right* **Add goals based on the rule body**  
+  Apply substitution and repeat until all goals solved
+
+-----------------------------------------------------------------------------------------
+- template: subtitle
+
+# Sketch
+## How resolution works
+
+-----------------------------------------------------------------------------------------
+- template: icons
+
+# Numbers
+## Calculating inside Prolog
+
+- *fa-forward-step* Peano arithmetic encoded as zero & successor
+- *fa-plug* Constraint Logic Programming (CLP) extensions
+- *fa-arrow-up-1-9* CLP(Z) adds a specialized solver for integers
+- *fa-layer-group* CLP(B), CLP(Q), CLP(R) and more
+
+*****************************************************************************************
+- template: subtitle
+
+# Logic programming
+## Implementing Prolog
+
+-----------------------------------------------------------------------------------------
+- template: lists
+
+# Advanced F# features
+
+![](img/lab06/fsharp.png)
+
+## Active patterns
+
+- Custom patterns for use in `match`
+- Match number with `Odd` or `Even`
+- Recognize special forms of terms
+- Complete or partial patterns
+
+## Sequence expressions
+
+- Write code that generates a sequence of items
+- Comprehensions (Haskell), generators (JS), ...
+- Lazy `seq {..}` or eager `[..]` or arrays `[|..|]`
+
+-----------------------------------------------------------------------------------------
+- template: subtitle
+
+# Demo
+## Advanced F# features
+
+-----------------------------------------------------------------------------------------
+- template: subtitle
+
+# Prolog
+## Code structure
+
+-----------------------------------------------------------------------------------------
+- template: code
+
+```ocaml
+(* Recursive term definition *)
+type Term =
+  | Atom of string
+  | Variable of string
+  | Predicate of string * Term list
+
+(* Facts have empty Body *)
+type Clause =
+  { Head : Term
+    Body : Term list }
+
+(* Substitution *)
+type Substitution =
+  Map<string, Term>
+
+(* Create a fact clause *)
+let fact p = { Head = p; Body = [] }
+
+(* Create a rule clause *)
+let rule p b = { Head = p; Body = b }
+```
+
+# Prolog programs
+
+Encoded as F# types!
+
+**Atom vs. variable**
+
+Atom is a single data item, thing that exists.
+
+Variable is a place&shy;holder that we want to assign a term to.
+
+-----------------------------------------------------------------------------------------
+- template: lists
+
+# The unification process
+
+![](img/lab06/unifysm.png)
+
+## Tiny implementation
+- Similar to our type inference code!
+- `unify` and `unifyLists` functions
+- Generate substitution for variables
+
+## Used in Prolog context
+- Same 2 uses of substitution
+- Occurs check done optionally
+- Use fresh set of variables when  
+  reusing rules from program database!
+
+-----------------------------------------------------------------------------------------
+- template: code
+- class: smallcode
+
+```ocaml
+let rec unifyLists l1 l2 =
+  match l1, l2 with
+  | [], [] ->
+      (* empty substitution*)
+  | h1::t1, h2::t2 ->
+      match unify h1 h2 with
+      | Some(s) -> (*
+         1. substitution 's' to
+            unify 'h1' and 'h2'
+         2. now unifiy 't1' and 't2'
+            recursively & compose
+         3. if not possible, fail *)
+      | _ -> (* fail *)
+  | _ -> (* fail *)
+
+and unify t1 t2 =
+  match t1, t2 with
+  | Atom(a1), Atom(a2) -> (* does 'a1' match 'a2'? *)
+  | Variable(v), t | t, Variable(v) ->
+      (* return a substitution *)
+  | Predicate(p1, args1), Predicate(p2, args2) ->
+      (* if p1 = p2, unify arguments recursively *)
+  | _ -> None
+```
+
+# Unification logic
+
+Split into two functions for better readability
+
+`unify` matches terms
+
+`unifyLists` matches two lists using `unify`
+
+-----------------------------------------------------------------------------------------
+- template: code
+- class: smaller
+
+```prolog
+% Number: 0
+zero
+
+% Number: 1
+one = s(zero)
+
+% Number: 5
+five = s(s(s(s(s(zero)))))
+
+% Empty list
+empty
+
+% List [1]
+cons(one, empty)
+
+% List [1; 5]
+cons(one, cons(five, empty))
+```
+
+# Adding support for numbers and lists
+
+**Nothing extra is needed!**
+
+Good enough for a tiny implementation.
+
+Terribly inefficient and limited if you want to calculate anything!
+
+-----------------------------------------------------------------------------------------
+- template: content
+- style: p, li { font-size:30pt; margin-bottom:6px; } p { margin-bottom:30px; }
+
+# Lab #6 - Tasks
+
+- **1. Basic** - Unification of Prolog terms
+- **2. Basic** - Proper handling of substitutions
+- **3. Basic** - Searching database & renaming
+- **4. Basic** - Solving Prolog goals
+- **5. (Bonus)** - Programming with numbers
+- **6. (Bonus)** - Programming with lists
